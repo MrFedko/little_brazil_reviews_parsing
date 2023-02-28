@@ -1,9 +1,9 @@
 from parser import Parser
 from db import kz_db
 from telegram import send_telegram
-from info import parser_bot
 
-if __name__ == '__main__':
+
+def lets_start():
     kz_parser = Parser("little brazil", '/Users/mac/Desktop/chromedriver')
     kz_db.connect()
     kz_parser.get_all_rev()
@@ -13,3 +13,7 @@ if __name__ == '__main__':
             send_telegram(kz_parser.get_message(item))
     kz_db.connect.commit()
     kz_db.close()
+
+
+if __name__ == '__main__':
+    lets_start()
