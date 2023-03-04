@@ -20,7 +20,8 @@ class Parser:
         ser = Service(self.path)
         op = webdriver.ChromeOptions()
         op.add_argument('headless')
-        # op.add_argument('--no-sandbox')
+        op.add_argument('--headless=new')
+        op.add_argument('--no-sandbox')
         browser = webdriver.Chrome(service=ser, options=op)
         browser.implicitly_wait(5)
         browser.get(url)
@@ -76,17 +77,17 @@ class Parser:
     def get_review_two_gis(self, url: str):
         ser = Service(self.path)
         op = webdriver.ChromeOptions()
-        # op.add_argument('headless')
-        # op.add_argument('--headless=new')
-        # op.add_argument('--no-sandbox')
+        op.add_argument('headless')
+        op.add_argument('--headless=new')
+        op.add_argument('--no-sandbox')
         browser = webdriver.Chrome(service=ser, options=op)
         browser.implicitly_wait(5)
         browser.get(url)
         print("Open website 2Gis")
         browser.maximize_window()
-        browser.save_screenshot("123.png")
+        browser.save_screenshot("open_2gis.png")
         sleep(5)
-        browser.save_screenshot('ss.png')
+        browser.save_screenshot('load_2gis.png')
         source_data = browser.page_source
         soup = BeautifulSoup(source_data, features="html.parser")
         reviews = soup.find_all('div', {'class': '_11gvyqv'})
@@ -97,9 +98,9 @@ class Parser:
         author_name = str(review.find('span', {'class': '_er2xx9'})).split('>')[2].split('<')[0]
         author_url = parser_bot.two_gis
         text = str(review.find('div', {'class': '_49x36f'})).split('>')[2].split('<')[0]
-        id_review = "".join([str(ord(i)) for i in author_name][:12])
         rating = len(review.find('div', {'class': '_1fkin5c'}) \
                      .find_all('span', {'style': 'width:10px;height:10px'}))
+        id_review = "".join([str(ord(i)) for i in author_name][:12]) + str(ord(text[0])) + str(rating)
 
         result = {'site': '2Gis',
                   'date_time': date_time,
@@ -168,8 +169,10 @@ class Parser:
         [self._reviews_query.append(self.parse_review_ya(i)) for i in self.get_review_ya(parser_bot.yandex)[:10]]
         [self._reviews_query.append(self.parse_review_two_gis(j)) for j in
          self.get_review_two_gis(parser_bot.two_gis)[:10]]
-        [self._reviews_query.append(self.parse_review_google(k)) for k in
-         self.get_review_google(parser_bot.google)]
+        # [self._reviews_query.append(self.parse_review_google(k)) for k in
+        #  self.get_review_google(parser_bot.google)]
+        # [self._reviews_query.append(self.parse_review_google(m)) for m in
+        #  self.get_review_google(parser_bot.google_2)]
 
     @property
     def reviews_query(self):
