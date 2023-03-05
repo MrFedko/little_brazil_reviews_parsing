@@ -121,7 +121,7 @@ class Parser:
         else:
             return None
 
-    def parse_review_google(self, review: dict) -> dict:
+    def parse_review_google(self, review: dict) -> (dict, None):
         if 'time' not in review:
             print(review)
             return None
@@ -141,7 +141,7 @@ class Parser:
                   'text': text}
         return result
 
-    def get_message(self, review_info: dict) -> str:
+    def get_message(self, review_info: dict) -> (str, None):
         if review_info is None:
             return None
         review_site = review_info['site']
@@ -169,11 +169,9 @@ class Parser:
         for ya, gis, google in zip((self.get_review_ya(parser_bot.yandex)[:5]),
                                    (self.get_review_two_gis(parser_bot.two_gis)[:5]),
                                    (self.get_review_google(parser_bot.google))):
-            self._reviews_query.append(self.parse_review_ya(ya))
-            self._reviews_query.append(self.parse_review_two_gis(gis))
-            self._reviews_query.append(self.parse_review_google(google))
-
-
+            self._reviews_query.extend((self.parse_review_ya(ya),
+                                        self.parse_review_two_gis(gis),
+                                        self.parse_review_google(google)))
 
     @property
     def reviews_query(self):
