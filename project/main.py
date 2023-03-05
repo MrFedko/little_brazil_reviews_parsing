@@ -8,9 +8,10 @@ def lets_start():
     kz_db.connect()
     kz_parser.get_all_rev()
     for item in kz_parser.reviews_query:
+        print(item)
         if not kz_db.search_id(item['review_id']):
             kz_db.insert(item)
-            # send_telegram(kz_parser.get_message(item))
+            send_telegram(kz_parser.get_message(item))
 
     kz_db.connect.commit()
     kz_db.close()

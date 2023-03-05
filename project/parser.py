@@ -166,13 +166,14 @@ class Parser:
         return message
 
     def get_all_rev(self):
-        [self._reviews_query.append(self.parse_review_ya(i)) for i in self.get_review_ya(parser_bot.yandex)[:10]]
-        [self._reviews_query.append(self.parse_review_two_gis(j)) for j in
-         self.get_review_two_gis(parser_bot.two_gis)[:10]]
-        # [self._reviews_query.append(self.parse_review_google(k)) for k in
-        #  self.get_review_google(parser_bot.google)]
-        # [self._reviews_query.append(self.parse_review_google(m)) for m in
-        #  self.get_review_google(parser_bot.google_2)]
+        for ya, gis, google in zip((self.get_review_ya(parser_bot.yandex)[:5]),
+                                   (self.get_review_two_gis(parser_bot.two_gis)[:5]),
+                                   (self.get_review_google(parser_bot.google))):
+            self._reviews_query.append(self.parse_review_ya(ya))
+            self._reviews_query.append(self.parse_review_two_gis(gis))
+            self._reviews_query.append(self.parse_review_google(google))
+
+
 
     @property
     def reviews_query(self):
